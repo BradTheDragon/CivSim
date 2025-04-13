@@ -1,25 +1,36 @@
 ######IMPORTS########
+import inspect
+import random
+import math
 
 ######VARIABLES######
-traits = {}
+traits = ["trait_religion", "trait_technology"]
+trait_values = {}
+old_trait_values = {}
+influence = {"trait_religion":
+                {"trait_technology": -1},
+            "trait_technology": 
+                {"trait_religion": -1}}
 
 ######FUNCTIONS######
 
-#Runs at the start of the program, to make sure the traits are up to date
-def update_trait_list():
-    global traits
-    traits = [name for name, obj in globals().items() if callable(obj) and name.startswith("trait_")]
+#Function to fluctuate the trait values randomly
+def fluctuate_traits(time_scale):
+    global trait_values
+    global old_trait_values
+    for trait, value in trait_values.items():
+        change = round(random.gauss(0, 5 * time_scale), 2)
+        trait_values[trait] = value + change
 
-#Mainly used to run trait functions
-def run_func(function_name, *args, **kwargs):
-    try:
-        # Get the function from the global scope
-        func = globals()[function_name]
-        if callable(func):
-            return func(*args, **kwargs)
-        else:
-            raise ValueError(f"'{function_name}' is not callable.")
-    except KeyError:
-        raise ValueError(f"Function '{function_name}' does not exist.")
-
-######VALUES#########
+#Runs at the start of the program, generates trait values
+def generate_trait_values():
+    global trait_values
+    for trait in traits:
+        trait_values[trait] = 0
+    
+#Function to determin the change on influenced traits
+def influence_trait(trait, influenced_trait, influence_scale, time_scale, old_trait_values):
+    global trait_values
+    change = old_trait_values[trait] * 0.01 * influence_scale * time_scale
+    if change * influence_scale > 0:
+        trait_values[influenced_trait] = round(old_trait_values[influenced_trait] + (old_trait_values[influenced_trait] * change), 2)
