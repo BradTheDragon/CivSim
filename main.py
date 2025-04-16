@@ -1,5 +1,5 @@
 ######IMPORTS########
-from traits import *
+from setup import *
 
 ######VARIABLES######
 
