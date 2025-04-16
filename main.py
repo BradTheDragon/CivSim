@@ -16,6 +16,7 @@ def game_loop():
     print(trait_values)
     input()
     fluctuate_traits(UPTADE_RATE)
+    cramp_trait_values()
     print(trait_values)
     input()
     old_trait_values = trait_values.copy()
@@ -24,6 +25,7 @@ def game_loop():
         if trait in influence:
             for influenced_trait, influence_scale in influence[trait].items():
                 influence_trait(trait, influenced_trait, influence_scale, UPTADE_RATE, old_trait_values)
+    cramp_trait_values()
     print(f"New Trait Values: {trait_values}")
 
 game_loop()
